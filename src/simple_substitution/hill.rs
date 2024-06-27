@@ -62,7 +62,7 @@ impl HillCipher {
         let k3 = key[2];
         let k4 = key[3];
 
-        let key_inv = ModArithmetic::mod_inverse(ModArithmetic::modm((k1*k4) - (k2*k3), m), m).expect("inverse not found");
+        let key_inv = ModArithmetic::mod_inverse(ModArithmetic::modm((k1*k4) - (k2*k3), m), m).expect("inverse doesn't exist");
 
         let m1: i32 = key_inv * k4; 
         let m2: i32 = key_inv * -k2; 
