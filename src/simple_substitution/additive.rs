@@ -27,12 +27,9 @@ impl AdditiveCipher {
     }
 
     fn shift_char(&self, c: char, key: i32) -> char {
-        if let Some(index) = self.char_set.index_of(c) {
-            let new_index = ModArithmetic::add_usize(index, key, self.char_set.len());
-            self.char_set.char_at(new_index).unwrap_or(c)
-        } else {
-            c
-        }
+        let index = self.char_set.index_of(c);
+        let new_index = ModArithmetic::add_usize(index, key, self.char_set.len());
+        self.char_set.char_at(new_index)
     }
 }
 

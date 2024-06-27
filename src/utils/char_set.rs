@@ -51,6 +51,10 @@ impl CharSet {
         Self::from_range('a', 'z')
     }
 
+    pub fn from_numbers() -> Self {
+        Self::from_string("0123456789")
+    }
+
     pub fn from_string(s: &str) -> Self {
         let mut chars: Vec<char> = s.chars().collect();
         
@@ -59,10 +63,6 @@ impl CharSet {
         chars.retain(|item| seen.insert(item.clone()));
 
         Self { chars }
-    }
-
-    pub fn from_numbers() -> Self {
-        Self::from_string("0123456789")
     }
 
     // methods
@@ -92,24 +92,20 @@ impl CharSet {
         self.chars.iter().last()
     }
 
-    pub fn index_of(&self, c: char) -> Option<usize> {
+    pub fn index_of(&self, c: char) -> usize {
         if let Some(index) = self.chars.iter().position(|&x| x == c) {
-            Some(index)
-            // Some((index as u32 + 1) as usize)
+            index
         } else {
-            None
+            panic!("character does't exist in charset");
         }
     }
 
-    pub fn char_at(&self, index: usize) -> Option<char> {
-        // if index == 0 {
-        //     // panic!("Index begins at 1, not 0!")
-        //     // return Some('\u{FFFD}');
-        //     return None;    
-        // }
-
-        self.chars.get(index).cloned()
-        // self.chars.get(index-1).cloned()
+    pub fn char_at(&self, index: usize) -> char {
+        if let Some(c) = self.chars.get(index).cloned() {
+            c
+        } else {
+            panic!("Index out of bounds");
+        }
     }
 }
 
@@ -123,7 +119,7 @@ mod tests {
     #[test]
     fn test_new() {
         let charset = CharSet::new();
-        assert_eq!(charset.len(), 95); // 127 - 32 = 95 printable ASCII characters
+        assert_eq!(charset.len(), 95);
         assert_eq!(charset.first(), Some(&' '));
         assert_eq!(charset.last(), Some(&'~'));
     }
@@ -138,7 +134,7 @@ mod tests {
 
     #[test]
     fn test_from_unicode() {
-        let charset = CharSet::from_unicode(0x0600, 0x0610); // Arabic supplement range
+        let charset = CharSet::from_unicode(0x0600, 0x0610);
         assert_eq!(charset.len(), 16);
         assert_eq!(charset.first(), Some(&'\u{0600}'));
         assert_eq!(charset.last(), Some(&'\u{060F}'));
@@ -210,26 +206,37 @@ mod tests {
     #[test]
     fn test_index_of() {
         let charset = CharSet::from_string("abcdef");
-        assert_eq!(charset.index_of('a'), Some(0));
-        assert_eq!(charset.index_of('c'), Some(2));
-        assert_eq!(charset.index_of('z'), None);
-
+        assert_eq!(charset.index_of('a'), 0);
+        assert_eq!(charset.index_of('c'), 2);
 
         let charset_num = CharSet::from_string("1234567890");
-        assert_eq!(charset_num.index_of('1'), Some(0));
-        assert_eq!(charset_num.index_of('0'), Some(9));
+        assert_eq!(charset_num.index_of('1'), 0);
+        assert_eq!(charset_num.index_of('0'), 9);
     }
 
     #[test]
     fn test_char_at() {
         let charset = CharSet::from_string("abcdef");
-        assert_eq!(charset.char_at(1), Some('b'));
-        assert_eq!(charset.char_at(10), None);
-
+        assert_eq!(charset.char_at(1), 'b');
 
         let charset_num = CharSet::from_numbers();
-        assert_eq!(charset_num.char_at(1), Some('1'));
-        assert_eq!(charset_num.char_at(9), Some('9'));
+        assert_eq!(charset_num.char_at(1), '1');
+        assert_eq!(charset_num.char_at(9), '9');
     }
+
+    #[test]
+    #[should_panic(expected = "Index out of bounds")]
+    fn test_char_at_panic() {
+        let charset = CharSet::from_string("abcdef");
+        charset.char_at(10);
+    }
+
+    #[test]
+    #[should_panic(expected = "character does't exist in charset")]
+    fn test_index_of_panic() {
+        let charset = CharSet::from_string("abcdef");
+        charset.index_of('z');
+    }
+
     
 }

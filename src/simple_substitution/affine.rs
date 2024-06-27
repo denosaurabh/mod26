@@ -18,20 +18,15 @@ impl AffineCipher {
     pub fn encrypt(&self, text: &str, k: i32, m: i32) -> String {
         text.chars()
             .map(|c| {
-                if let Some(index) = self.char_set.index_of(c) {
-                    let p = ModArithmetic::mult_usize(index, k, self.char_set.len());
+                let index = self.char_set.index_of(c);
+                let p = ModArithmetic::mult_usize(index, k, self.char_set.len());
 
-                    println!("c: {}, index: {}, p: {}, k: {}, m: {}", c, index, p, k, m);
-
-                    let new_index = ModArithmetic::add_usize(
-                        p,
-                        m,
-                        self.char_set.len()
-                    );
-                    self.char_set.char_at(new_index).unwrap_or(c)
-                } else {
-                    c
-                }
+                let new_index = ModArithmetic::add_usize(
+                    p,
+                    m,
+                    self.char_set.len()
+                );
+                self.char_set.char_at(new_index)
                 
             })
             .collect()
@@ -43,17 +38,13 @@ impl AffineCipher {
 
         text.chars()
             .map(|c| {
-                if let Some(index) = self.char_set.index_of(c) {
-                    let new_index = ModArithmetic::mult_usize(
-                        ModArithmetic::add_usize(index, -m, self.char_set.len()),
-                        k_inv,
-                        self.char_set.len()
-                    );
-                    self.char_set.char_at(new_index).unwrap_or(c)
-                } else {
-                    c
-                }
-                
+                let index = self.char_set.index_of(c);
+                let new_index = ModArithmetic::mult_usize(
+                    ModArithmetic::add_usize(index, -m, self.char_set.len()),
+                    k_inv,
+                    self.char_set.len()
+                );
+                self.char_set.char_at(new_index)
             })
             .collect()
     }

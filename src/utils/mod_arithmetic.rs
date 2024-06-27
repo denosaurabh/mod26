@@ -21,7 +21,7 @@ impl ModArithmetic {
     }
 
     pub fn div(p: i32, x: i32, k: i32) -> i32 {
-        if let Some(xi) = Self::mod_inverse(x, k) {
+        if let Ok(xi) = Self::mod_inverse(x, k) {
             return Self::mult(p, xi, k);
         } else {
             panic!("Modular inverse does not exist");
@@ -32,7 +32,7 @@ impl ModArithmetic {
     }
 
     // Extended Euclidean Algorithm
-    pub fn mod_inverse(k: i32, m: i32) -> Option<i32> {
+    pub fn mod_inverse(k: i32, m: i32) -> Result<i32, &'static str> {
         let mut t = 0;
         let mut newt = 1;
         let mut r = m;
@@ -45,9 +45,9 @@ impl ModArithmetic {
         }
     
         if r > 1 {
-            None  // a and m are not coprime, inverse doesn't exist
+            Err("a and m are not coprime, inverse doesn't exist")
         } else {
-            Some((if t < 0 { t + m } else { t }) % m)
+            Ok((if t < 0 { t + m } else { t }) % m)
         }
     }
 
@@ -115,8 +115,8 @@ mod tests {
 
     #[test]
     fn mod_inverse() {
-        assert_eq!(super::ModArithmetic::mod_inverse(3, 26), Some(9));
-        assert_eq!(super::ModArithmetic::mod_inverse(21, 26), Some(5));
+        assert_eq!(super::ModArithmetic::mod_inverse(3, 26), Ok(9));
+        assert_eq!(super::ModArithmetic::mod_inverse(21, 26), Ok(5));
     }
 
     #[test]

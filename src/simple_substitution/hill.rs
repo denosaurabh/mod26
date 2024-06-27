@@ -34,26 +34,20 @@ impl HillCipher {
         blocks
             .iter()
             .map(|block| {
-                let bi: Vec<i32> = block.iter().map(|c| self.char_set.index_of(*c).unwrap() as i32).collect::<Vec<i32>>();
+                let bi: Vec<i32> = block.iter().map(|c| self.char_set.index_of(*c) as i32).collect::<Vec<i32>>();
 
                 let c1 = ModArithmetic::add(
-                    // ModArithmetic::mult(bi[0], key[0], m),
-                    // ModArithmetic::mult(bi[1], key[1], m),
                     bi[0] * key[0],
                     bi[1] * key[1],
                     m
                 );
                 let c2 = ModArithmetic::add(
-                    // ModArithmetic::mult(bi[0], key[2], m),
-                    // ModArithmetic::mult(bi[1], key[3], m),
                     bi[0] * key[2],
                     bi[1] * key[3],
                     m
                 );
 
-                println!("bi: {:?}, c1: {}, c2: {}", bi, c1, c2);
-
-                format!("{}{}", self.char_set.char_at(c1 as usize).unwrap(), self.char_set.char_at(c2 as usize).unwrap())
+                format!("{}{}", self.char_set.char_at(c1 as usize), self.char_set.char_at(c2 as usize))
             })
             .collect()
     }
@@ -68,9 +62,7 @@ impl HillCipher {
         let k3 = key[2];
         let k4 = key[3];
 
-        let Some(key_inv) = ModArithmetic::mod_inverse(ModArithmetic::modm((k1*k4) - (k2*k3), m), m) else {
-            panic!("Invalid key: determinant is not coprime with {}", m);
-        };
+        let key_inv = ModArithmetic::mod_inverse(ModArithmetic::modm((k1*k4) - (k2*k3), m), m).expect("inverse not found");
 
         let m1: i32 = key_inv * k4; 
         let m2: i32 = key_inv * -k2; 
@@ -80,7 +72,7 @@ impl HillCipher {
         blocks
             .iter()
             .map(|block| {
-                let bi: Vec<i32> = block.iter().map(|c| self.char_set.index_of(*c).unwrap() as i32).collect::<Vec<i32>>();
+                let bi: Vec<i32> = block.iter().map(|c| self.char_set.index_of(*c) as i32).collect::<Vec<i32>>();
 
                 let p1 = ModArithmetic::add(
                     bi[0] * m1,
@@ -93,7 +85,7 @@ impl HillCipher {
                     m
                 );
 
-                format!("{}{}", self.char_set.char_at(p1 as usize).unwrap(), self.char_set.char_at(p2 as usize).unwrap())
+                format!("{}{}", self.char_set.char_at(p1 as usize), self.char_set.char_at(p2 as usize))
             })
             .collect()
     }

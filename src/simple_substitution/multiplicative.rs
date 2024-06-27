@@ -23,27 +23,23 @@ impl MultiplicativeCipher {
     }
 
     pub fn decrypt(&self, text: &str, key: i32) -> String {
-        if let Some(inv_key) = ModArithmetic::mod_inverse(key, self.char_set.len() as i32) {
-            self.encrypt(text, inv_key)
-        } else {
-            panic!("Invalid key: {} is not coprime with {}", key, self.char_set.len());
+        match ModArithmetic::mod_inverse(key, self.char_set.len() as i32) {
+            Ok(inv_key) => self.encrypt(text, inv_key),
+            Err(err) => {
+               panic!("{}", err)
+            },
         }
     }
 
     fn shift_char(&self, c: char, key: i32) -> char {
-        if let Some(index) = self.char_set.index_of(c) {
-            let new_index = ModArithmetic::mult_usize(index, key, self.char_set.len());
+        let index = self.char_set.index_of(c);
+        let new_index = ModArithmetic::mult_usize(index, key, self.char_set.len());
 
-            println!("c: {}, index: {}, new_index: {}, key: {}, m: {}", c, index, new_index, key, self.char_set.len());
-
-            if new_index == 0 {
-                return '\u{FFFD}';
-            }
-
-            self.char_set.char_at(new_index).unwrap_or(c)
-        } else {
-            c
+        if new_index == 0 {
+            return '\u{FFFD}';
         }
+
+        self.char_set.char_at(new_index)
     }
 }
 
