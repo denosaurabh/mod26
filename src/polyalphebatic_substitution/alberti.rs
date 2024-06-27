@@ -5,7 +5,6 @@
 *===================================================================*/
 
 use crate::utils::char_set::CharSet;
-use crate::utils::mod_arithmetic::ModArithmetic;
 
 
 pub struct AlbertiCipher {
@@ -52,12 +51,6 @@ impl AlbertiCipher {
             })
             .collect()
     }
-
-    fn shift_char(&self, c: char, key: i32) -> char {
-        let index = self.char_set.index_of(c);
-        let new_index = ModArithmetic::add_usize(index, key, self.char_set.len());
-        self.char_set.char_at(new_index as usize)
-    }
 }
 
 
@@ -69,7 +62,7 @@ mod tests {
     #[test]
     fn test_encrypt() {
         let char_set = CharSet::from_string("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-        let disk = CharSet::from_string("CDEFGHIJKLMNOPQRSTUVWXYZAB");
+        let disk = CharSet::from_string(/**/"CDEFGHIJKLMNOPQRSTUVWXYZAB");
         let alberti = AlbertiCipher::new(char_set, disk, 4);
 
         let encrypted = alberti.encrypt("ZABCDEF");
@@ -79,7 +72,7 @@ mod tests {
     #[test]
     fn test_decrypt() {
         let char_set = CharSet::from_string("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-        let disk = CharSet::from_string("CDEFGHIJKLMNOPQRSTUVWXYZAB");
+        let disk = CharSet::from_string(/**/"CDEFGHIJKLMNOPQRSTUVWXYZAB");
         let alberti = AlbertiCipher::new(char_set, disk, 4);
 
         let decrypted = alberti.decrypt("BCDEGHI");
