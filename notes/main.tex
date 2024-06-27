@@ -1,0 +1,80 @@
+\documentclass[12pt, letterpaper]{article}
+
+\title{Implementations of 30+ Cryptography Algorithms in Rust}
+\author{Saurabh Gupta}
+\date{June 2024}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+
+This is the abstract of your document.
+It should provide a brief summary of your work,
+typically in about 150-300 words.
+The abstract gives readers a quick overview of 
+your paper's main points and conclusions.
+
+\end{abstract}
+
+\tableofcontents
+\pagebreak
+
+\section{Introduction}
+
+Cryptography is the practice of secure communication 
+
+\pagebreak
+
+\section{Simple Substitution}
+Simple substitution ciphers are basic encryption techniques where each letter in the plaintext is replaced by another letter or symbol in the ciphertext.
+
+\subsection{Additive}
+The additive cipher, also known as Caesar cipher, shifts each letter of the alphabet by a fixed number of positions.
+
+\begin{equation}
+E(x) = (x + k) \bmod 26
+\end{equation}
+
+Where $E(x)$ is the encrypted letter, $x$ is the original letter (as a number from 0-25), and $k$ is the shift key.
+
+\subsection{Multiplicative}
+In a multiplicative cipher, each letter is multiplied by a fixed number (modulo 26).
+
+\begin{equation}
+E(x) = (ax) \bmod 26
+\end{equation}
+
+Where $a$ is the multiplication key, which must be coprime to 26.
+
+\subsection{Affine}
+The affine cipher combines both additive and multiplicative methods:
+
+\begin{equation}
+E(x) = (ax + b) \bmod 26
+\end{equation}
+
+Where $a$ and $b$ are the keys, and $a$ must be coprime to 26.
+
+% \subsection{Hill}
+% The Hill cipher uses matrix multiplication to encrypt blocks of letters. For a 2x2 matrix:
+
+% \begin{equation}
+% \begin{pmatrix} 
+% c_1 \\ c_2 
+% \end{pmatrix} = 
+% \begin{pmatrix} 
+% k_{11} & k_{12} \\ 
+% k_{21} & k_{22}
+% \end{pmatrix}
+% \begin{pmatrix} 
+% p_1 \\ p_2 
+% \end{pmatrix} \bmod 26
+% \end{equation}
+
+% Where $c_i$ are ciphertext letters, $p_i$ are plaintext letters, and $k_{ij}$ form the key matrix.
+
+
+\end{document}
+

@@ -6,6 +6,8 @@
 
  *===================================================================*/
 
+use std::collections::HashSet;
+
 pub struct CharSet {
     pub chars: Vec<char>,
 }
@@ -45,14 +47,22 @@ impl CharSet {
         Self::from_unicode(32, 127)
     }
 
+    pub fn from_alphabet_smallcase() -> Self {
+        Self::from_range('a', 'z')
+    }
+
     pub fn from_string(s: &str) -> Self {
         let mut chars: Vec<char> = s.chars().collect();
         
         // remove dublicates
-        chars.sort();
-        chars.dedup();
+        let mut seen = HashSet::new();
+        chars.retain(|item| seen.insert(item.clone()));
 
         Self { chars }
+    }
+
+    pub fn from_numbers() -> Self {
+        Self::from_string("0123456789")
     }
 
     // methods
@@ -83,11 +93,23 @@ impl CharSet {
     }
 
     pub fn index_of(&self, c: char) -> Option<usize> {
-        self.chars.iter().position(|&x| x == c)
+        if let Some(index) = self.chars.iter().position(|&x| x == c) {
+            Some(index)
+            // Some((index as u32 + 1) as usize)
+        } else {
+            None
+        }
     }
 
     pub fn char_at(&self, index: usize) -> Option<char> {
+        // if index == 0 {
+        //     // panic!("Index begins at 1, not 0!")
+        //     // return Some('\u{FFFD}');
+        //     return None;    
+        // }
+
         self.chars.get(index).cloned()
+        // self.chars.get(index-1).cloned()
     }
 }
 
@@ -188,15 +210,26 @@ mod tests {
     #[test]
     fn test_index_of() {
         let charset = CharSet::from_string("abcdef");
+        assert_eq!(charset.index_of('a'), Some(0));
         assert_eq!(charset.index_of('c'), Some(2));
         assert_eq!(charset.index_of('z'), None);
+
+
+        let charset_num = CharSet::from_string("1234567890");
+        assert_eq!(charset_num.index_of('1'), Some(0));
+        assert_eq!(charset_num.index_of('0'), Some(9));
     }
 
     #[test]
     fn test_char_at() {
         let charset = CharSet::from_string("abcdef");
-        assert_eq!(charset.char_at(2), Some('c'));
+        assert_eq!(charset.char_at(1), Some('b'));
         assert_eq!(charset.char_at(10), None);
+
+
+        let charset_num = CharSet::from_numbers();
+        assert_eq!(charset_num.char_at(1), Some('1'));
+        assert_eq!(charset_num.char_at(9), Some('9'));
     }
     
 }

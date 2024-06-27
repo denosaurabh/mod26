@@ -1,38 +1,42 @@
 pub struct ModArithmetic;
 
 impl ModArithmetic {
-    pub fn add(a: i32, x: i32, m: i32) -> i32 {
-        (a + x).rem_euclid(m)
+    pub fn modm(p: i32, m: i32) -> i32 {
+        p.rem_euclid(m)
     }
-    pub fn add_usize(a: usize, x: i32, m: usize) -> usize {
-        Self::add(a as i32, x, m as i32) as usize
+
+    pub fn add(p: i32, k: i32, m: i32) -> i32 {
+        Self::modm(p + k, m)
+    }
+    pub fn add_usize(p: usize, k: i32, m: usize) -> usize {
+        Self::add(p as i32, k, m as i32) as usize
     }
 
 
-    pub fn mult(a: i32, x: i32, m: i32) -> i32 {
-        (a * x).rem_euclid(m)
+    pub fn mult(p: i32, k: i32, m: i32) -> i32 {
+        Self::modm(p * k, m)
     }
-    pub fn mult_usize(a: usize, x: i32, m: usize) -> usize {
-        Self::mult(a as i32, x, m as i32) as usize
+    pub fn mult_usize(p: usize, k: i32, m: usize) -> usize {
+        Self::mult(p as i32, k, m as i32) as usize
     }
 
-    pub fn div(a: i32, x: i32, m: i32) -> i32 {
-        if let Some(xi) = Self::mod_inverse(x, m) {
-            return Self::mult(a, xi, m);
+    pub fn div(p: i32, x: i32, k: i32) -> i32 {
+        if let Some(xi) = Self::mod_inverse(x, k) {
+            return Self::mult(p, xi, k);
         } else {
             panic!("Modular inverse does not exist");
         }
     }
-    pub fn div_usize(a: usize, x: i32, m: usize) -> usize {
-        Self::div(a as i32, x, m as i32) as usize
+    pub fn div_usize(p: usize, k: i32, m: usize) -> usize {
+        Self::div(p as i32, k, m as i32) as usize
     }
 
     // Extended Euclidean Algorithm
-    pub fn mod_inverse(a: i32, m: i32) -> Option<i32> {
+    pub fn mod_inverse(k: i32, m: i32) -> Option<i32> {
         let mut t = 0;
         let mut newt = 1;
         let mut r = m;
-        let mut newr = a.abs();
+        let mut newr = k.abs();
     
         while newr != 0 {
             let quotient = r / newr;
@@ -63,6 +67,15 @@ impl ModArithmetic {
 #[cfg(test)]
 mod tests {
     #[test]
+    fn modm() {
+        assert_eq!(super::ModArithmetic::modm(0, 10), 0);
+        assert_eq!(super::ModArithmetic::modm(10, 10), 0);
+        assert_eq!(super::ModArithmetic::modm(1, 10), 1);
+        assert_eq!(super::ModArithmetic::modm(-1, 10), 9);
+        assert_eq!(super::ModArithmetic::modm(5, 10), 5);
+    }
+
+    #[test]
     fn test_add() {
         assert_eq!(super::ModArithmetic::add(5, 3, 26), 8);
         assert_eq!(super::ModArithmetic::add(25, 3, 26), 2);
@@ -84,6 +97,8 @@ mod tests {
     fn test_mult_usize() {
         assert_eq!(super::ModArithmetic::mult_usize(5, 3, 26), 15);
         assert_eq!(super::ModArithmetic::mult_usize(25, 3, 26), 23);
+
+        assert_eq!(super::ModArithmetic::mult_usize(1, 10, 10), 0);
     }
 
     #[test]

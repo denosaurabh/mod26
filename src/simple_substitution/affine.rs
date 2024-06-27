@@ -1,3 +1,8 @@
+/*===================================================================
+ * Author: denosauabh
+ * Description: Implementation of simple `C = kP + m` Affine cipher
+*===================================================================*/
+
 use crate::utils::char_set::CharSet;
 use crate::utils::mod_arithmetic::ModArithmetic;
 
@@ -6,12 +11,20 @@ pub struct AffineCipher {
 }
 
 impl AffineCipher {
+    pub fn new(char_set: CharSet) -> Self {
+        Self { char_set }
+    }
+
     pub fn encrypt(&self, text: &str, k: i32, m: i32) -> String {
         text.chars()
             .map(|c| {
                 if let Some(index) = self.char_set.index_of(c) {
+                    let p = ModArithmetic::mult_usize(index, k, self.char_set.len());
+
+                    println!("c: {}, index: {}, p: {}, k: {}, m: {}", c, index, p, k, m);
+
                     let new_index = ModArithmetic::add_usize(
-                        ModArithmetic::mult_usize(index, k, self.char_set.len()),
+                        p,
                         m,
                         self.char_set.len()
                     );
@@ -53,15 +66,19 @@ mod tests {
 
     #[test]
     fn test_encrypt() {
-        let char_set = CharSet::from_string("1234567890");
-        let cipher = AffineCipher { char_set };
+        let char_set = CharSet::from_numbers();
+        println!("char_set: {:?}", char_set.chars);
+
+        let cipher = AffineCipher::new(char_set);
+
+
         assert_eq!(cipher.encrypt("123", 7, 3), "074");
     }
 
     #[test]
     fn test_decrypt() {
-        let char_set = CharSet::from_string("1234567890");
-        let cipher = AffineCipher { char_set };
+        let char_set = CharSet::from_numbers();
+        let cipher = AffineCipher::new(char_set);
         assert_eq!(cipher.decrypt("074", 7, 3), "123");
     }
 }
