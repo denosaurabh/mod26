@@ -12,6 +12,7 @@
 *===================================================================*/
 
 use crate::utils::char_set::CharSet;
+use crate::utils::consts::NULL;
 use crate::utils::mod_arithmetic::ModArithmetic;
 
 pub struct HillCipher {
@@ -107,7 +108,7 @@ impl HillCipher {
 
     pub fn PAD_CHAR(&self) -> char {
         // self.char_set.char_at(0).unwrap_or(' ')
-        '\u{FFFD}'
+        NULL
     }
 }
 

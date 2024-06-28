@@ -5,6 +5,7 @@
 
 
 use crate::utils::char_set::CharSet;
+use crate::utils::consts::NULL;
 use crate::utils::mod_arithmetic::ModArithmetic;
 
 struct MultiplicativeCipher {
@@ -36,7 +37,7 @@ impl MultiplicativeCipher {
         let new_index = ModArithmetic::mult_usize(index, key, self.char_set.len());
 
         if new_index == 0 {
-            return '\u{FFFD}';
+            return NULL;
         }
 
         self.char_set.char_at(new_index)
