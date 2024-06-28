@@ -60,7 +60,6 @@ mod tests {
         let encrypted = vigenere.encrypt("attackingtonight", &"OCULORHINOLARINGOLOGY".to_lowercase());
         assert_eq!(encrypted, "ovnlqbpvthznzouz");
 
-
         let char_set = CharSet::from_numbers();
         let vigenere = VigenèreCipher::new(char_set);
 

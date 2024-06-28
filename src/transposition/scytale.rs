@@ -1,6 +1,6 @@
 /*===================================================================
  * Author: denosauabh
- * Description: Implementation of Columnar Transpostion like Scytale
+ * Description: Implementation of Scytale
  * Reference: https://en.wikipedia.org/wiki/Scytale
 *===================================================================*/
 
@@ -8,11 +8,11 @@ use cursive::Vec2;
 
 use crate::utils::{consts::NULL, mod_arithmetic::ModArithmetic};
 
-pub struct Columnar {
+pub struct Scytale {
     row_len: u32,
 }
 
-impl Columnar {
+impl Scytale {
     pub fn new(row_len: u32) -> Self {
         Self { row_len }
     }
@@ -76,25 +76,25 @@ mod tests {
 
     #[test]
     fn test_parse_plain_text() {
-        let columnar = Columnar::new(5);
-        let parsed = columnar.parse_plain_text("HELLO WORLD!");
+        let scytale = Scytale::new(5);
+        let parsed = scytale.parse_plain_text("HELLO WORLD!");
         assert_eq!(parsed, format!("HELLO WORLD!{}{}{}", NULL, NULL, NULL));
     }
 
     #[test]
     fn test_encrypt() {
-        let columnar = Columnar::new(3);
-        let encrypted = columnar.encrypt("HELLO WORLD");
+        let scytale = Scytale::new(3);
+        let encrypted = scytale.encrypt("HELLO WORLD");
         assert_eq!(encrypted, format!("HLWLEOODL R{}", NULL));
 
-        let columnar = Columnar::new(4);
-        assert_eq!(columnar.encrypt("I am hurt very badly help"), format!("I tra p h ydh{}auv le�mrebyl{}", NULL, NULL));
+        let scytale = Scytale::new(4);
+        assert_eq!(scytale.encrypt("I am hurt very badly help"), format!("I tra p h ydh{}auv le�mrebyl{}", NULL, NULL));
     }
 
     #[test]
     fn test_decrypt() {
-        let columnar = Columnar::new(3);
-        let decrypted = columnar.decrypt(format!("HLWLEOODL R{}", NULL).as_str());
+        let scytale = Scytale::new(3);
+        let decrypted = scytale.decrypt(format!("HLWLEOODL R{}", NULL).as_str());
         assert_eq!(decrypted, "HELLO WORLD");
     }
 }
