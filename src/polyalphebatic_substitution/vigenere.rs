@@ -54,7 +54,7 @@ mod tests {
 
     #[test]
     fn test_encrypt() {
-        let char_set = CharSet::from_alphabet_smallcase();
+        let char_set = CharSet::from_alphabet_lowercase();
         let vigenere = VigenèreCipher::new(char_set);
 
         let encrypted = vigenere.encrypt("attackingtonight", &"OCULORHINOLARINGOLOGY".to_lowercase());
@@ -69,7 +69,7 @@ mod tests {
 
     #[test]
     fn test_decrypt() {
-        let char_set = CharSet::from_alphabet_smallcase();
+        let char_set = CharSet::from_alphabet_lowercase();
         let vigenere = VigenèreCipher::new(char_set);
 
         let decrypted = vigenere.decrypt("ovnlqbpvthznzouz", &"OCULORHINOLARINGOLOGY".to_lowercase());

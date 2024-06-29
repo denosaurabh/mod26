@@ -36,8 +36,6 @@ impl Columnar {
                 let pos = (r * key.len()) + c;
                 let ki = key[c];
 
-                println!("r: {}, c: {}, pos: {}, ki: {}, p: {:?}", r, c, pos, ki, text.get(pos));
-
                 if pos < text.len() {
                     encryped_vec[ki - 1].push(text[pos]);
                 }

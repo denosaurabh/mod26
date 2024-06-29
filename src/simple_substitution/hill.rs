@@ -125,7 +125,7 @@ mod tests {
         assert_eq!(hill_cipher.encrypt("1234", [1, 2, 3, 4]), "5115");
 
         
-        let char_set_sm_alph = CharSet::from_alphabet_smallcase();
+        let char_set_sm_alph = CharSet::from_alphabet_lowercase();
         let hill_cipher_sm_alph = HillCipher::new(char_set_sm_alph);
 
         assert_eq!(hill_cipher_sm_alph.encrypt("jack", [3, 5, 6, 1]), "bcew");
@@ -134,7 +134,7 @@ mod tests {
 
     #[test]
     fn test_decrypt() {
-        let char_set_sm_alph = CharSet::from_alphabet_smallcase();
+        let char_set_sm_alph = CharSet::from_alphabet_lowercase();
         let hill_cipher_sm_alph = HillCipher::new(char_set_sm_alph);
 
 

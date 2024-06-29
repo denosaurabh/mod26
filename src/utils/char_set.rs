@@ -47,7 +47,7 @@ impl CharSet {
         Self::from_unicode(32, 127)
     }
 
-    pub fn from_alphabet_smallcase() -> Self {
+    pub fn from_alphabet_lowercase() -> Self {
         Self::from_range('a', 'z')
     }
 
