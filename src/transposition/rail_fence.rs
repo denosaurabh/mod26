@@ -5,7 +5,7 @@
  * Reference: https://en.wikipedia.org/wiki/Rail_fence_cipher
 *===================================================================*/
 
-use crate::utils::{consts::NULL, mod_arithmetic::ModArithmetic};
+use crate::utils::{consts::NULL};
 
 pub struct RailFence {
     row_len: u32,
@@ -39,7 +39,7 @@ impl RailFence {
         let text = s.chars().collect::<Vec<char>>();
         
         let period = 2 * (self.row_len - 1);
-        let p_usize = period as usize;
+        let _p_usize = period as usize;
 
         // let grid = vec![self.row_len, (text.len() as u32) / self.row_len];
         let grid = vec![self.row_len, text.len() as u32];
@@ -55,12 +55,12 @@ impl RailFence {
             let charCount = if r == 0 || r == self.row_len - 1 { 1 } else { 2 };
 
             let beginPad = r;
-            let beginPad_usize = beginPad as usize;
+            let _beginPad_usize = beginPad as usize;
 
             let endPad = if r == 0 { 0 } else { beginPad - 1 };
 
             let middlePad = period - beginPad - endPad - charCount;
-            let middlePad_usize = middlePad as usize;
+            let _middlePad_usize = middlePad as usize;
 
             println!("beginPad: {}, middlePad: {}, endPad: {}, charCount: {}, period: {}", beginPad, middlePad, endPad, charCount, period);
 
@@ -111,7 +111,7 @@ impl RailFence {
     }
 
 
-    pub fn decrypt(&self, text: &str) -> String {
+    pub fn decrypt(&self, _text: &str) -> String {
         todo!()
     }
 

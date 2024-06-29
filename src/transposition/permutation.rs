@@ -22,7 +22,7 @@ impl Permutation {
     }
 
     pub fn permute(&self, text: &str, key: Vec<usize>) -> String {
-        let mut text: Vec<char> = text.chars().collect();
+        let text: Vec<char> = text.chars().collect();
 
         if key.len() > text.len() {
             panic!("Key length must be less than or equal to text length");
@@ -46,7 +46,7 @@ impl Permutation {
     }
 
     pub fn parse_key(&self, s: &str) -> Vec<usize> {
-        let mut chars: Vec<char> = s.chars().collect();
+        let chars: Vec<char> = s.chars().collect();
         let mut order: Vec<usize> = (0..chars.len()).collect();
         
         order.sort_by_key(|&i| chars[i]);

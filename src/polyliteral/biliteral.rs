@@ -35,7 +35,7 @@ impl Biliteral {
     pub fn encrypt(&self, text: &str) -> String {
         text.chars()
             .enumerate()
-            .map(|(i, c)| {
+            .map(|(_i, c)| {
                 let mut index = self.char_set.index_of(c);
 
                 /// to accomodate IJ together
@@ -82,7 +82,7 @@ impl Biliteral {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::utils::char_set::CharSet;
+    
 
     #[test]
     fn test_encrypt() {

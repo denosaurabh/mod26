@@ -70,7 +70,7 @@ impl Columnar {
     }
 
     pub fn parse_key(&self, s: &str) -> Vec<usize> {
-        let mut chars: Vec<char> = s.chars().collect();
+        let chars: Vec<char> = s.chars().collect();
         let mut order: Vec<usize> = (0..chars.len()).collect();
         
         order.sort_by_key(|&i| chars[i]);
