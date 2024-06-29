@@ -103,6 +103,6 @@ mod tests {
         let permutation = Permutation::new();
         assert_eq!(permutation.decrypt("hbet", "TALE"), "theb");
         assert_eq!(permutation.decrypt("bacdfegh", "MEOW"), "abcdefgh");
-        assert_eq!(permutation.decrypt(&format!("bacd{}", NULL), "MEOW"), format!("abcd{}", NULL)); // a character get lost
+        assert_eq!(permutation.decrypt(&format!("bacd{}", NULL), "MEOW"), format!("abcd{}", NULL)); // a character gets lost
     }
 }
