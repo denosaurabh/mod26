@@ -23,8 +23,6 @@ impl Columnar {
     }
 
     pub fn permute_encrypt(&self, text: &str, key: Vec<usize>) -> String {
-        println!("key: {:?}", key);
-
         let text: Vec<char> = text.chars().collect();
 
         let mut encryped_vec: Vec<Vec<char>> = vec![vec![]; key.len()];
@@ -47,24 +45,41 @@ impl Columnar {
         encrypted.to_string()
     }
 
+    /// TODO: not working for some cases
     pub fn permute_decrypt(&self, text: &str, key: Vec<usize>) -> String {
         let text: Vec<char> = text.chars().collect();
+
         let cols = key.len();
-        let rows = (text.len() / cols) + if text.len() % cols == 0 { 0 } else { 1 };
-        let mut decrypted: Vec<char> = vec![NULL; rows * cols];
+        let rows = text.len() / cols;
+
+        let mut decryped_vec: Vec<Vec<char>> = vec![vec![]; key.len()];
+        let mut decrypted: Vec<char> = vec![NULL; text.len()];
         
-        let inverse_key = self.inverse_key(key);
-        let mut pos = 0;
-    
-        for &col in inverse_key.iter() {
-            let col_length = if col <= text.len() % cols { rows } else { rows - 1 };
-            for row in 0..col_length {
-                if pos < text.len() {
-                    decrypted[row * cols + col - 1] = text[pos];
-                    pos += 1;
+        let mut inverse_key = self.inverse_key(key);
+        inverse_key = inverse_key.iter().map(|&x| x - 1).collect();
+
+        for i in 0..text.len() {
+            let ri = i % rows;
+            let ci = i / rows;
+
+            if ci < inverse_key.len() { 
+                let k = inverse_key[ci];
+                decryped_vec[k].push(text[i]);
+            } else { 
+                decryped_vec[i - (rows * cols)].push(text[i]);
+            };
+        }
+
+        for i in 0..decryped_vec.len() {
+            for j in 0..decryped_vec[i].len() {
+                let pos = (j * cols) + i;
+                if pos < decrypted.len() {
+                    decrypted[pos] = decryped_vec[i][j];
                 }
             }
         }
+
+        println!("decryped_vec: {:?}", decryped_vec);
     
         decrypted.into_iter().filter(|&c| c != NULL).collect()
     }
@@ -126,6 +141,11 @@ mod tests {
         assert_eq!(columnar.decrypt(
             &"EVLNA CDTES EAROF ODEEC WIREE".replace(" ", ""), "ZEBRAS"),
             "WE ARE DISCOVERED FLEE AT ONCE".replace(" ", "")
+        );
+
+        assert_eq!(
+            columnar.decrypt("DGDDDAGDDGAFADDFDADVDVFAADVX", "PRIVACY"),
+            "ADDDDDADAGVGADDDAFDGVFVFADDX"
         );
 
     }
