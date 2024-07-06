@@ -21,7 +21,7 @@
  *===================================================================*/
 
 
- use crate::{transposition::columnar::Columnar, utils::char_set::CharSet};
+use crate::{transposition::columnar::Columnar, utils::char_set::CharSet};
 
  pub struct ADFGVX {
     char_set: CharSet,
@@ -31,7 +31,7 @@
  }
  
  impl ADFGVX {
-     /// as this is based purely on Polybius Square, we will use the default alphabet charset
+    /// as this is based purely on Polybius Square, we will use the default alphabet charset
      pub fn new(
         char_set: Option<CharSet>,
 
@@ -99,8 +99,8 @@
  
  #[cfg(test)]
  mod tests {
-     use super::*;
- 
+    use super::*;
+
      #[test]
      fn test_encrypt() {
          let adfgvx = ADFGVX::new(Option::None, Option::None, Option::None);
