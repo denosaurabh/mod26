@@ -119,17 +119,12 @@ impl AES {
         round_keys[0] = _key;
 
         for i in 1..11 {
-            println!("ROUND: {}", i);
-
             let r = AES::u128_to_u32_array(round_keys[i-1]);
             
             let mut temp: u32 = r[3];
-            AES::print_u32("first_", temp);
 
             // rotate left
-            // temp = Self::rotate_left(temp, (AES::RC[i] as u32) * 8);
             temp = Self::rotate_left(temp);
-            AES::print_u32("rotate", temp);
 
             // s-box
             let mut temp_after_sbox: u32 = 0;
@@ -140,11 +135,9 @@ impl AES {
 
                 temp_after_sbox = temp_after_sbox | shiftback;
             }
-            AES::print_u32("s--box", temp_after_sbox);
 
             // round constant
             temp_after_sbox = temp_after_sbox ^ ((AES::RC[i] as u32) << 24);
-            AES::print_u32("roundc", temp_after_sbox);
 
             // xor
             let mut round_key: [u32; 4] = [0; 4];
@@ -154,7 +147,6 @@ impl AES {
             round_key[3] = r[3] ^ round_key[2];
 
             round_keys[i] = AES::u32_array_to_u128(round_key);
-            AES::print_u128("ROUNKEY", round_keys[i]);
         }
 
         round_keys
@@ -242,23 +234,10 @@ impl AES {
         let mut columns: [[u8; 4]; 4] = [[0; 4]; 4];
 
         for i in 0..4 {
-            // columns[0][i] = (state >> (128 - 8  - (i*32))) as u8;
-            // columns[1][i] = (state >> (128 - 16 - (i*32))) as u8;
-            // columns[2][i] = (state >> (128 - 24 - (i*32))) as u8;
-            // columns[3][i] = (state >> (128 - 32 - (i*32))) as u8;
-
             columns[i][0] = (state >> (128 - 8  - (i*32))) as u8;
             columns[i][1] = (state >> (128 - 16 - (i*32))) as u8;
             columns[i][2] = (state >> (128 - 24 - (i*32))) as u8;
             columns[i][3] = (state >> (128 - 32 - (i*32))) as u8;
-        }
-
-        // print columns
-        for i in 0..4 {
-            for j in 0..4 {
-                print!("{:02X} ", columns[i][j]);
-            }
-            println!("");
         }
 
         // mix columns
@@ -273,17 +252,6 @@ impl AES {
 
             columns[i] = new_column;
         }
-
-        // print
-        println!("AFTER MIX COLUMNS");
-        for i in 0..4 {
-            for j in 0..4 {
-                print!("{:02X} ", columns[i][j]);
-            }
-            println!("");
-        }
-
-
 
         // update state
         for j in 0..4 {
