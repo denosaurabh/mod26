@@ -295,7 +295,7 @@ impl DES {
 
 
 fn print_u64_array_hex(arr: &[u64; 16]) {
-    for (i, &value) in arr.iter().enumerate() {
+    for (i, &value) in arr.iter().enumerate() { 
         println!("arr[{:2}] = 0x{:016X}", i, value);
     }
 }
