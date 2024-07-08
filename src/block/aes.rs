@@ -291,7 +291,7 @@ impl AES {
     }
 
     pub fn decrypt(&self, input: u128) -> u128 {
-        self.cipher(input)
+        todo!()
     }
 
 }
@@ -325,7 +325,7 @@ mod tests {
     }
 
     #[test]
-    fn test_aes() {
+    fn test_encrypt_aes() {
         let key  = 0x2b7e151628aed2a6abf7158809cf4f3c;
         let text = 0x3243f6a8885a308d313198a2e0370734;
 

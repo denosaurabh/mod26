@@ -5,6 +5,10 @@ impl ModArithmetic {
         p.rem_euclid(m)
     }
 
+    pub fn modm_u32(p: u32, m: u32) -> u32 {
+        p.rem_euclid(m)
+    }
+
     pub fn add(p: i32, k: i32, m: i32) -> i32 {
         Self::modm(p + k, m)
     }
