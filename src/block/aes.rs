@@ -8,7 +8,6 @@
 
 use std::u128;
 
-
 pub struct AES {
     key: [u32; 4],
     round_keys: [u128; 11],
@@ -153,32 +152,7 @@ impl AES {
     }
 
     pub fn cipher(&self, input: u128) -> u128 {
-        let mut state: u128 = input;
-
-        state ^= self.round_keys[0];
-
-        for i in 1..(11-1) {
-            println!("ROUND: {}", i);
-
-            state = self.sub_bytes(state); // s-boxes
-            println!("sub_bytes:    0x{:016X}", state);
-
-            state = self.shift_rows(state); // transposition
-            println!("shift_rows:   0x{:016X}", state);
-
-            state = self.mix_columns(state); // hill cipher
-            println!("mix_columns:  0x{:016X}", state);
-
-            state ^= self.round_keys[i]; // add round key
-            println!("round_key:    0x{:016X}", state);
-        }
-
-        state = self.sub_bytes(state);
-        state = self.shift_rows(state);
-        state ^= self.round_keys[10];
-
-        state
-    }
+            }
 
     pub fn sub_bytes(&self, state: u128) -> u128 {
         let mut new_state: [u8; 16] = state.to_be_bytes();
@@ -263,6 +237,94 @@ impl AES {
         new_state
     }
 
+    pub fn inv_sub_bytes(&self, state: u128) -> u128 {
+        let mut new_state: [u8; 16] = state.to_be_bytes();
+
+        for i in 0..16 {
+            new_state[i] = Self::inv_s_box(new_state[i]); 
+        }
+
+        u128::from_be_bytes(new_state)
+    }
+
+    pub fn inv_s_box(val: u8) -> u8 {
+        Self::INVERSE_AES_SBOX[(val >> 4) as usize][(val & 0x0F) as usize]
+    }
+
+    pub fn inv_shift_rows(&self, state: u128) -> u128 {
+        let mut new_state: u128 = 0;
+
+        // Collect rows
+        let mut rows: [[u8; 4]; 4] = [[0; 4]; 4];
+
+        for i in 0..4 {
+            let mut row: [u8; 4] = [0; 4];
+            row[0] = (state >> (128 - 8 - i*8))   as u8;
+            row[1] = (state >> (128 - 40 - i*8))  as u8;
+            row[2] = (state >> (128 - 72 - i*8))  as u8;
+            row[3] = (state >> (128 - 104 - i*8)) as u8;
+
+            rows[i] = row;
+        }
+
+        // Inverse shift rows
+        for i in 0..4 {
+            let mut row: [u8; 4] = rows[i];
+            let mut new_row: [u8; 4] = [0; 4];
+
+            for j in 0..4 {
+                new_row[j] = row[(j + 4 - i) % 4];
+            }
+
+            rows[i] = new_row;
+        }
+
+        for j in 0..4 {
+            for i in 0..4 {
+                new_state = new_state | ((rows[i][j] as u128) << (128 - 8 - i*8 - j*32));
+            }
+        }
+
+        new_state
+    }
+
+    pub fn inv_mix_columns(&self, state: u128) -> u128 {
+        let mut new_state: u128 = 0;
+
+        // Collect columns
+        let mut columns: [[u8; 4]; 4] = [[0; 4]; 4];
+
+        for i in 0..4 {
+            columns[i][0] = (state >> (128 - 8  - (i*32))) as u8;
+            columns[i][1] = (state >> (128 - 16 - (i*32))) as u8;
+            columns[i][2] = (state >> (128 - 24 - (i*32))) as u8;
+            columns[i][3] = (state >> (128 - 32 - (i*32))) as u8;
+        }
+
+        // Inverse mix columns
+        for i in 0..4 {
+            let column: [u8; 4] = columns[i];
+            let mut new_column: [u8; 4] = [0; 4];
+
+            new_column[0] = Self::mul(0x0e, column[0]) ^ Self::mul(0x0b, column[1]) ^ Self::mul(0x0d, column[2]) ^ Self::mul(0x09, column[3]);
+            new_column[1] = Self::mul(0x09, column[0]) ^ Self::mul(0x0e, column[1]) ^ Self::mul(0x0b, column[2]) ^ Self::mul(0x0d, column[3]);
+            new_column[2] = Self::mul(0x0d, column[0]) ^ Self::mul(0x09, column[1]) ^ Self::mul(0x0e, column[2]) ^ Self::mul(0x0b, column[3]);
+            new_column[3] = Self::mul(0x0b, column[0]) ^ Self::mul(0x0d, column[1]) ^ Self::mul(0x09, column[2]) ^ Self::mul(0x0e, column[3]);
+
+            columns[i] = new_column;
+        }
+
+        // Update state
+        for j in 0..4 {
+            for i in 0..4 {
+                new_state = new_state | ((columns[j][i] as u128) << (128 - 8 - i*8 - j*32));
+            }
+        }
+
+        new_state
+    }
+}
+
     pub fn mul(a: u8, b: u8) -> u8 {
         let mut product: u8 = 0;
         let mut a_copy = a;
@@ -287,14 +349,57 @@ impl AES {
 
 
     pub fn encrypt(&self, input: u128) -> u128 {
-        self.cipher(input)
+        let mut state: u128 = input;
+
+        state ^= self.round_keys[0];
+
+        for i in 1..(11-1) {
+            // println!("ROUND: {}", i);
+
+            state = self.sub_bytes(state); // s-boxes
+            // println!("sub_bytes:    0x{:016X}", state);
+
+            state = self.shift_rows(state); // transposition
+            // println!("shift_rows:   0x{:016X}", state);
+
+            state = self.mix_columns(state); // hill cipher
+            // println!("mix_columns:  0x{:016X}", state);
+
+            state ^= self.round_keys[i]; // add round key
+            // println!("round_key:    0x{:016X}", state);
+        }
+
+        state = self.sub_bytes(state);
+        state = self.shift_rows(state);
+        state ^= self.round_keys[10];
+
+        state
+
     }
 
     pub fn decrypt(&self, input: u128) -> u128 {
-        todo!()
-    }
+        let mut state: u128 = input;
 
+        // Initial round key addition
+        state ^= self.round_keys[10];
+
+        // 9 rounds of decryption
+        for i in (1..10).rev() {
+            state = self.inv_shift_rows(state);
+            state = self.inv_sub_bytes(state);
+            state ^= self.round_keys[i];
+            state = self.inv_mix_columns(state);
+        }
+
+        // Final round
+        state = self.inv_shift_rows(state);
+        state = self.inv_sub_bytes(state);
+        state ^= self.round_keys[0];
+
+        state
+    }
 }
+
 
 
 
@@ -336,5 +441,16 @@ mod tests {
         let output = aes.encrypt(text);
 
         assert_eq!(output, 0x3925841d02dc09fbdc118597196a0b32);
+    }
+
+    #[test]
+    fn test_decrypt_aes() {
+        let key  = 0x2b7e151628aed2a6abf7158809cf4f3c;
+        let ciphertext = 0x3925841d02dc09fbdc118597196a0b32;
+
+        let aes = AES::new(key);
+        let decrypted = aes.decrypt(ciphertext);
+
+        assert_eq!(decrypted, 0x3243f6a8885a308d313198a2e0370734);
     }
 }
