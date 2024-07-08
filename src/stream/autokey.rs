@@ -12,6 +12,7 @@ use crate::utils::{char_set::CharSet, mod_arithmetic::ModArithmetic};
 pub enum AutoKeyType {
     Plaintext,
     Ciphertext,
+    // Key
 }
 
 pub struct Autokey {
