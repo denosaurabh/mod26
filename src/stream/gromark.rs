@@ -1,3 +1,10 @@
+/*===================================================================
+ * Implementation of Gromark Cipher
+ * Author: denosauabh
+ * Reference: https://en.wikipedia.org/wiki/Gromark_cipher
+ *===================================================================*/
+
+
 use std::usize;
 
 use crate::utils::{char_set::CharSet, mod_arithmetic::ModArithmetic};
