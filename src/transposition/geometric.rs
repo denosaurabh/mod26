@@ -17,7 +17,7 @@
 
 use cursive::Vec2;
 
-use crate::utils::{consts::NULL};
+use crate::utils::consts::NULL;
 
 enum GeometricTranspositionMethod {
     Horizontal,

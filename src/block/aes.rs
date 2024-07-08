@@ -151,9 +151,6 @@ impl AES {
         round_keys
     }
 
-    pub fn cipher(&self, input: u128) -> u128 {
-            }
-
     pub fn sub_bytes(&self, state: u128) -> u128 {
         let mut new_state: [u8; 16] = state.to_be_bytes();
 
@@ -323,7 +320,6 @@ impl AES {
 
         new_state
     }
-}
 
     pub fn mul(a: u8, b: u8) -> u8 {
         let mut product: u8 = 0;
