@@ -5,6 +5,7 @@ mod polyliteral;
 mod block;
 mod stream;
 mod mode_of_operations;
+mod public_key;
 
 mod utils;
 

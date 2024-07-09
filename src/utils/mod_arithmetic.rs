@@ -34,9 +34,29 @@ impl ModArithmetic {
     pub fn div_usize(p: usize, k: i32, m: usize) -> usize {
         Self::div(p as i32, k, m as i32) as usize
     }
+    
+    pub fn pow(p: u64, e: u64, m: u64) -> u64 {
+        ModArithmetic::pow_u128(p as u128, e as u128, m as u128) as u64
+    }
+
+    pub fn pow_u128(p: u128, e: u128, m: u128) -> u128 {
+        let mut result = 1;
+        let mut base = p % m;
+        let mut exponent = e;
+
+        while exponent > 0 {
+            if exponent % 2 == 1 {
+                result = (result * base) % m;
+            }
+            exponent /= 2;
+            base = (base * base) % m;
+        }
+
+        result
+    }
 
     // Extended Euclidean Algorithm
-    pub fn mod_inverse(k: i32, m: i32) -> Result<i32, &'static str> {
+    pub fn mod_inverse_i128(k: i128, m: i128) -> Result<i128, &'static str> {
         let mut t = 0;
         let mut newt = 1;
         let mut r = m;
@@ -55,6 +75,15 @@ impl ModArithmetic {
         }
     }
 
+
+
+    pub fn mod_inverse(k: i32, m: i32) -> Result<i32, &'static str> {
+        match Self::mod_inverse_i128(k as i128, m as i128) {
+            Ok(x) => Ok(x as i32),
+            Err(e) => Err(e),
+        }
+    }
+
     pub fn euclidean_gcd(a: i32, b: i32) -> i32 {
         if b == 0 { return a; }
         if a == 0 { return b }
@@ -65,6 +94,18 @@ impl ModArithmetic {
 
         Self::euclidean_gcd(b, r)
     }
+
+    pub fn euclidean_gcd_u128(a: u128, b: u128) -> u128 {
+        if b == 0 { return a; }
+        if a == 0 { return b }
+        if a < b  { return Self::euclidean_gcd_u128(b, a) }
+
+        let r = a % b;
+        if r == 0 { return b; }
+
+        Self::euclidean_gcd_u128(b, r)
+    }
+
 }
 
 

@@ -10,3 +10,4 @@ cursive = "0.19"
 
 rand    = "*"
 log     = "*"
+primes = "0.4.0"

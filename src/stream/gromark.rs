@@ -1,6 +1,6 @@
 /*===================================================================
  * Implementation of Gromark Cipher
- * Author: denosauabh
+ * Author: denosaurabh
  * Reference: https://en.wikipedia.org/wiki/Gromark_cipher
  *===================================================================*/
 
