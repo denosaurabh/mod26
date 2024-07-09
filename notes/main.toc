@@ -1,5 +1,0 @@
-\contentsline {section}{\numberline {1}Introduction}{2}{}%
-\contentsline {section}{\numberline {2}Simple Substitution}{3}{}%
-\contentsline {subsection}{\numberline {2.1}Additive}{3}{}%
-\contentsline {subsection}{\numberline {2.2}Multiplicative}{3}{}%
-\contentsline {subsection}{\numberline {2.3}Affine}{3}{}%
