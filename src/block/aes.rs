@@ -84,11 +84,11 @@ impl AES {
 
         let mut new_u8_arr: [u8; 4] = [0; 4];
         for i in 0..4 {
-            new_u8_arr[i as usize] = u8_arr[(i + 1) % 4];
+            new_u8_arr[i] = u8_arr[(i + 1) % 4];
         }
 
-        let new_val = u32::from_be_bytes(new_u8_arr);
-        new_val
+        
+        u32::from_be_bytes(new_u8_arr)
     }
 
     pub fn s_box(val: u8) -> u8 {
@@ -132,11 +132,11 @@ impl AES {
                 let res = Self::s_box(pos) as u32;
                 let shiftback: u32 = res << (8 * j);
 
-                temp_after_sbox = temp_after_sbox | shiftback;
+                temp_after_sbox |= shiftback;
             }
 
             // round constant
-            temp_after_sbox = temp_after_sbox ^ ((AES::RC[i] as u32) << 24);
+            temp_after_sbox ^= (AES::RC[i] as u32) << 24;
 
             // xor
             let mut round_key: [u32; 4] = [0; 4];
@@ -179,7 +179,7 @@ impl AES {
 
         // shift rows
         for i in 0..4 {
-            let mut row: [u8; 4] = rows[i];
+            let row: [u8; 4] = rows[i];
             let mut new_row: [u8; 4] = [0; 4];
 
             for j in 0..4 {
@@ -191,7 +191,7 @@ impl AES {
 
         for j in 0..4 {
             for i in 0..4 {
-                new_state = new_state | ((rows[i][j] as u128) << (128 - 8 - i*8 - j*32));
+                new_state |= (rows[i][j] as u128) << (128 - 8 - i*8 - j*32);
             }
         }
 
@@ -227,7 +227,7 @@ impl AES {
         // update state
         for j in 0..4 {
             for i in 0..4 {
-                new_state = new_state | ((columns[j][i] as u128) << (128 - 8 - i*8 - j*32));
+                new_state |= (columns[j][i] as u128) << (128 - 8 - i*8 - j*32);
             }
         }
 
@@ -266,7 +266,7 @@ impl AES {
 
         // Inverse shift rows
         for i in 0..4 {
-            let mut row: [u8; 4] = rows[i];
+            let row: [u8; 4] = rows[i];
             let mut new_row: [u8; 4] = [0; 4];
 
             for j in 0..4 {
@@ -278,7 +278,7 @@ impl AES {
 
         for j in 0..4 {
             for i in 0..4 {
-                new_state = new_state | ((rows[i][j] as u128) << (128 - 8 - i*8 - j*32));
+                new_state |= (rows[i][j] as u128) << (128 - 8 - i*8 - j*32);
             }
         }
 
@@ -314,7 +314,7 @@ impl AES {
         // Update state
         for j in 0..4 {
             for i in 0..4 {
-                new_state = new_state | ((columns[j][i] as u128) << (128 - 8 - i*8 - j*32));
+                new_state |= (columns[j][i] as u128) << (128 - 8 - i*8 - j*32);
             }
         }
 

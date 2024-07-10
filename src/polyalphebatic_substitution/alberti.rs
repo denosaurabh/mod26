@@ -31,9 +31,9 @@ impl AlbertiCipher {
                 let pi = self.char_set.index_of(c);
                 
                 let period = i / (self.period_len as usize);
-                let di = self.disk.char_at(pi + period );
+                
 
-                di
+                self.disk.char_at(pi + period )
             })
             .collect()
     }
@@ -45,9 +45,9 @@ impl AlbertiCipher {
                 let di = self.disk.index_of(c);
                 
                 let period = i / (self.period_len as usize);
-                let pi = self.char_set.char_at(di - period);
+                
 
-                pi
+                self.char_set.char_at(di - period)
             })
             .collect()
     }

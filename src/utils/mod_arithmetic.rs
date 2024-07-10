@@ -26,7 +26,7 @@ impl ModArithmetic {
 
     pub fn div(p: i32, x: i32, k: i32) -> i32 {
         if let Ok(xi) = Self::mod_inverse(x, k) {
-            return Self::mult(p, xi, k);
+            Self::mult(p, xi, k)
         } else {
             panic!("Modular inverse does not exist");
         }

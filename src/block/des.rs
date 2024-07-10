@@ -225,7 +225,7 @@ impl DES {
         }
         // println!("Permuted: 0x{:016X}", permuted);
 
-        permuted as u32
+        permuted
     }
 
 
@@ -264,9 +264,7 @@ impl DES {
         }
 
         // Swap
-        let temp = l;
-        l = r;
-        r = temp;
+        std::mem::swap(&mut l, &mut r);
         
         // Step 3: Final Permutation
         let combined: u64 = ((l as u64) << 32) | r as u64;
@@ -340,12 +338,12 @@ mod tests {
 
     #[test]
     fn test_encrypt() {
-        let key: u64 = u64::from_str_radix(&"789", 16).expect("Invalid key");
+        let key: u64 = u64::from_str_radix("789", 16).expect("Invalid key");
         let des = DES::new(key);
 
         // print_u64_array_hex(&des.round_keys);
 
-        let text: u64 = u64::from_str_radix(&"1234", 16).expect("Invalid plaintext");
+        let text: u64 = u64::from_str_radix("1234", 16).expect("Invalid plaintext");
         let ciphertext: u64 =  0xD7BB47F844A55D09;
 
         let encrypted = des.encrypt(text);
@@ -355,10 +353,10 @@ mod tests {
 
     #[test]
     fn test_decrypt() {
-        let key: u64 = u64::from_str_radix(&"789", 16).expect("Invalid key");
+        let key: u64 = u64::from_str_radix("789", 16).expect("Invalid key");
         let des = DES::new(key);
 
-        let text: u64 = u64::from_str_radix(&"1234", 16).expect("Invalid plaintext");
+        let text: u64 = u64::from_str_radix("1234", 16).expect("Invalid plaintext");
         let ciphertext: u64 =  0xD7BB47F844A55D09;
 
         let decrypted = des.decrypt(ciphertext);

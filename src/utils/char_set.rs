@@ -32,7 +32,7 @@ impl CharSet {
 
         let mut index: usize = 0;
         for i in start..end {
-            chars.insert(index as usize, std::char::from_u32(i).unwrap());
+            chars.insert(index, std::char::from_u32(i).unwrap());
             index += 1;
         }
         Self { chars }
@@ -61,7 +61,7 @@ impl CharSet {
         
         // remove dublicates
         let mut seen = HashSet::new();
-        chars.retain(|item| seen.insert(item.clone()));
+        chars.retain(|item| seen.insert(*item));
 
         Self { chars }
     }
@@ -86,7 +86,7 @@ impl CharSet {
     }
 
     pub fn first(&self) -> Option<&char> {
-        self.chars.iter().next()
+        self.chars.first()
     }
 
     pub fn last(&self) -> Option<&char> {

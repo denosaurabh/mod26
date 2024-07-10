@@ -126,12 +126,12 @@ mod tests {
     fn test_encrypt() {
         let columnar = Columnar::new();
         assert_eq!(columnar.encrypt(
-            &"WE ARE DISCOVERED FLEE AT ONCE QKJEU".replace(" ", ""), "ZEBRAS"), 
-            "EVLNE ACDTK ESEAQ ROFOJ DEECU WIREE".replace(" ", "")
+            &"WE ARE DISCOVERED FLEE AT ONCE QKJEU".replace(' ', ""), "ZEBRAS"), 
+            "EVLNE ACDTK ESEAQ ROFOJ DEECU WIREE".replace(' ', "")
         );
         assert_eq!(columnar.encrypt(
-            &"WE ARE DISCOVERED FLEE AT ONCE".replace(" ", ""), "ZEBRAS"), 
-            "EVLNA CDTES EAROF ODEEC WIREE".replace(" ", "")
+            &"WE ARE DISCOVERED FLEE AT ONCE".replace(' ', ""), "ZEBRAS"), 
+            "EVLNA CDTES EAROF ODEEC WIREE".replace(' ', "")
         );
     }
 
@@ -139,8 +139,8 @@ mod tests {
     fn test_decrypt() {
         let columnar = Columnar::new();
         assert_eq!(columnar.decrypt(
-            &"EVLNA CDTES EAROF ODEEC WIREE".replace(" ", ""), "ZEBRAS"),
-            "WE ARE DISCOVERED FLEE AT ONCE".replace(" ", "")
+            &"EVLNA CDTES EAROF ODEEC WIREE".replace(' ', ""), "ZEBRAS"),
+            "WE ARE DISCOVERED FLEE AT ONCE".replace(' ', "")
         );
 
         assert_eq!(

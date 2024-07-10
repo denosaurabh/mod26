@@ -42,7 +42,7 @@ impl RailFence {
         let _p_usize = period as usize;
 
         // let grid = vec![self.row_len, (text.len() as u32) / self.row_len];
-        let grid = vec![self.row_len, text.len() as u32];
+        let grid = [self.row_len, text.len() as u32];
 
         let totalPeriods = text.len() / period as usize;
 
@@ -138,7 +138,7 @@ mod tests {
     #[test]
     fn test_encrypt() {
         let rail_fence = RailFence::new(3);
-        let encrypted = rail_fence.encrypt(&"WE ARE DISCOVERED RUN AT ONCE".replace(" ", ""));
+        let encrypted = rail_fence.encrypt(&"WE ARE DISCOVERED RUN AT ONCE".replace(' ', ""));
         assert_eq!(encrypted, format!("WECRUOERDSOEERNTNEAIVDAC"));
 
         let rail_fence = RailFence::new(3);

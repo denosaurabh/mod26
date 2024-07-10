@@ -34,8 +34,7 @@ impl Biliteral {
 
     pub fn encrypt(&self, text: &str) -> String {
         text.chars()
-            .enumerate()
-            .map(|(_i, c)| {
+            .map(|c| {
                 let mut index = self.char_set.index_of(c);
 
                 /// to accomodate IJ together
@@ -61,7 +60,7 @@ impl Biliteral {
                 let mut col = c.to_digit(10).unwrap() - 1;
 
                 if row * 5 + col > 9 {
-                    let cc: u32 = col.clone() + 1;
+                    let cc: u32 = col + 1;
 
                     if cc > 4 {
                         row += 1;
@@ -89,14 +88,14 @@ mod tests {
         let biliteral = Biliteral::new();
 
         let encrypted = biliteral.encrypt("HELLO");
-        assert_eq!(encrypted, "23 15 31 31 34".replace(" ", ""));
+        assert_eq!(encrypted, "23 15 31 31 34".replace(' ', ""));
     }
 
     #[test]
     fn test_decrypt() {
         let biliteral = Biliteral::new();
 
-        let decrypted = biliteral.decrypt(&"23 15 31 31 34".replace(" ", ""));
+        let decrypted = biliteral.decrypt(&"23 15 31 31 34".replace(' ', ""));
         assert_eq!(decrypted, "HELLO");
     }
 }

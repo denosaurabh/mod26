@@ -105,15 +105,15 @@ use crate::{transposition::columnar::Columnar, utils::char_set::CharSet};
      fn test_encrypt() {
          let adfgvx = ADFGVX::new(Option::None, Option::None, Option::None);
  
-         let encrypted = adfgvx.encrypt(&"ATTACK AT 1200 AM".replace(" ", ""), "PRIVACY");
-         assert_eq!(encrypted, "DGDD DAGD DGAF ADDF DADV DVFA ADVX".replace(" ", ""));
+         let encrypted = adfgvx.encrypt(&"ATTACK AT 1200 AM".replace(' ', ""), "PRIVACY");
+         assert_eq!(encrypted, "DGDD DAGD DGAF ADDF DADV DVFA ADVX".replace(' ', ""));
      }
  
      #[test]
      fn test_decrypt() {
         let adfgvx = ADFGVX::new(Option::None, Option::None, Option::None);
  
-        let decrypted: String = adfgvx.decrypt(&"DGDD DAGD DGAF ADDF DADV DVFA ADVX".replace(" ", ""), "PRIVACY");
-        assert_eq!(decrypted, "ATTACK AT 1200 AM".replace(" ", ""));
+        let decrypted: String = adfgvx.decrypt(&"DGDD DAGD DGAF ADDF DADV DVFA ADVX".replace(' ', ""), "PRIVACY");
+        assert_eq!(decrypted, "ATTACK AT 1200 AM".replace(' ', ""));
      }
  }

@@ -51,7 +51,7 @@ impl TPPPohigHellman {
         // 2. Bob encrypts the message with his private key
         let mut bob_encrypted_message = Vec::new();
         for c in alice_encrypted_message.iter() {
-            let c = ModArithmetic::pow(*c as u64, self.b, self.m);
+            let c = ModArithmetic::pow(*c, self.b, self.m);
             bob_encrypted_message.push(c);
         };
 
@@ -63,7 +63,7 @@ impl TPPPohigHellman {
         println!("A inverse: {:?}", a_inv);
 
         for c in bob_encrypted_message.iter() {
-            let c = ModArithmetic::pow(*c as u64, a_inv, self.m);
+            let c = ModArithmetic::pow(*c, a_inv, self.m);
             alice_decrypted_message.push(c);
         };
 
@@ -76,7 +76,7 @@ impl TPPPohigHellman {
         println!("B inverse: {:?}", b_inv);
 
         for c in alice_decrypted_message.iter() {
-            let c = ModArithmetic::pow(*c as u64, b_inv, self.m);
+            let c = ModArithmetic::pow(*c, b_inv, self.m);
             bob_decrypted_message.push(c as u32);
         };
 
