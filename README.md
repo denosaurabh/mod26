@@ -13,7 +13,7 @@
 
 
 
-```
+<pre>
 # Mod-26
 
 Library of over 25+ cryptography algorithms ranging from classical to modern. 
@@ -22,8 +22,8 @@ Helpful for students & beginners who want to refer a minimal headstart-
 implementation of different ciphers & encryptions.
 
 This project was coded alongside-
-while I was reading the book "The Mathematics of Secrets" (https://amzn.in/d/0dkXNyTh)
-```
+while I was reading the book "The Mathematics of Secrets" (<a href="https://amzn.in/d/0dkXNyTh">https://amzn.in/d/0dkXNyTh</a>)
+</pre>
 
 
 ```
@@ -53,14 +53,14 @@ while I was reading the book "The Mathematics of Secrets" (https://amzn.in/d/0dk
 
 ---- Polyalphabetic Substitution
 
-- <a href="/src/polyalphabetic_substitution/vigenere.rs">vigenere</a>
-- <a href="/src/polyalphabetic_substitution/alberti.rs">alberti</a>
+- <a href="/src/polyalphebatic_substitution/vigenere.rs">vigenere</a>
+- <a href="/src/polyalphebatic_substitution/alberti.rs">alberti</a>
 
 
 ---- Polyliteral Substitution
 
-- <a href="/src/polyliteral_substitution/adfgvx.rs">adfgvx</a>
-- <a href="/src/polyliteral_substitution/biliteral.rs">biliteral</a>
+- <a href="/src/polyliteral/adfgvx.rs">adfgvx</a>
+- <a href="/src/polyliteral/biliteral.rs">biliteral</a>
 
 
 ---- Transposition
@@ -74,21 +74,21 @@ while I was reading the book "The Mathematics of Secrets" (https://amzn.in/d/0dk
 
 ---- Block Cipher
 
-- <a href="/src/block_cipher/des.rs">des</a>
-- <a href="/src/block_cipher/aes.rs">aes</a>
+- <a href="/src/block/des.rs">des</a>
+- <a href="/src/block/aes.rs">aes</a>
 
 
 ---- Stream Cipher
 
-- <a href="/src/stream_cipher/autokey.rs">autokey</a>
-- <a href="/src/stream_cipher/gromark.rs">gromark</a>
+- <a href="/src/stream/autokey.rs">autokey</a>
+- <a href="/src/stream/gromark.rs">gromark</a>
 
 
 ---- Public Key Cipher
 
-- <a href="/src/public_key_cipher/pohlig_hellman.rs">pohlig_hellman</a>
-- <a href="/src/public_key_cipher/diffie_hellman.rs">diffie_hellman</a>
-- <a href="/src/public_key_cipher/rsa.rs">rsa</a>
+- <a href="/src/public_key/pohlig_hellman.rs">pohlig_hellman</a>
+- <a href="/src/public_key/diffie_hellman.rs">diffie_hellman</a>
+- <a href="/src/public_key/rsa.rs">rsa</a>
 
 
 --------------------
@@ -105,7 +105,7 @@ while I was reading the book "The Mathematics of Secrets" (https://amzn.in/d/0dk
 
 # Useful Utils
 
-- <a href="/src/utils/mod_arethematic.rs">Modular Arethematic</a>
+- <a href="/src/utils/mod_arithmetic.rs">Modular Arithmetic</a>
 - <a href="/src/utils/char_set.rs">Custom Charset</a>
 </pre>
 
