@@ -97,8 +97,6 @@ while I was reading the book "The Mathematics of Secrets" (https://amzn.in/d/0dk
 - Digital Signatures
 - Lattice-based Cryptography
 
-
-
 </pre>
 
 
@@ -108,9 +106,7 @@ while I was reading the book "The Mathematics of Secrets" (https://amzn.in/d/0dk
 
 - <a href="/src/utils/mod_arethematic.rs">Modular Arethematic</a>
 - <a href="/src/utils/char_set.rs">Custom Charset</a>
-
 </pre>
-
 
 ```
 
@@ -126,9 +122,6 @@ let encrypted = vigenere.encrypt("attackingtonight", key);
 
 // decrypt
 let decrypted = vigenere.decrypt("ovnlqbpvthznzouz", key);
-
-
-
 ```
 
 
