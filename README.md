@@ -42,6 +42,7 @@ while I was reading the book "The Mathematics of Secrets" (https://amzn.in/d/0dk
 <pre>
 # Implementations
 
+
 ---- Simple Substitution
 
 - <a href="/src/simple_substitution/additive.rs">additive</a>
@@ -102,14 +103,13 @@ while I was reading the book "The Mathematics of Secrets" (https://amzn.in/d/0dk
 
 <pre>
 
-# Useful Utilities
+# Useful Utils
 
 - <a href="/src/utils/mod_arethematic.rs">Modular Arethematic</a>
 - <a href="/src/utils/char_set.rs">Custom Charset</a>
 </pre>
 
 ```
-
 # Example 
 
 let char_set = CharSet::from_alphabet_lowercase();
@@ -118,10 +118,10 @@ let vigenere = VigenèreCipher::new(char_set);
 let key = "oculorhinolaringology";
 
 // encrypt
-let encrypted = vigenere.encrypt("attackingtonight", key);
+let encrypted = vigenere.encrypt("attackingtonight", key); // -> ovnlqbpvthznzouz 
 
 // decrypt
-let decrypted = vigenere.decrypt("ovnlqbpvthznzouz", key);
+let decrypted = vigenere.decrypt("ovnlqbpvthznzouz", key); // -> attackingtonight
 ```
 
 
