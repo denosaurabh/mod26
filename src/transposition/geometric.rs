@@ -15,8 +15,6 @@
 
  *===================================================================*/
 
-use cursive::Vec2;
-
 use crate::utils::consts::NULL;
 
 enum GeometricTranspositionMethod {
@@ -33,6 +31,11 @@ enum GeometricTranspositionMethod {
     SpiralCounterClockwise,
 }
 
+struct Vec2 {
+    x: usize,
+    y: usize,
+}
+
 pub struct Geometric {
     method: GeometricTranspositionMethod,
     row_len: u32,
@@ -46,7 +49,9 @@ impl Geometric {
     pub fn encrypt(&self, s: &str) -> String {
         let text = self.parse_plain_text(s).chars().collect::<Vec<char>>();
 
-        let grid = Vec2::new(self.row_len as usize, text.len() / self.row_len as usize);
+        let x = self.row_len as usize;
+        let y = text.len() / x;
+        let grid = Vec2 { x, y };
 
         let mut encrypted: Vec<char> = Vec::new();
 

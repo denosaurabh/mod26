@@ -4,9 +4,12 @@
  * Reference: https://en.wikipedia.org/wiki/Scytale
 *===================================================================*/
 
-use cursive::Vec2;
-
 use crate::utils::{consts::NULL};
+
+struct Vec2 {
+    x: usize,
+    y: usize,
+}
 
 pub struct Scytale {
     row_len: u32,
@@ -20,7 +23,9 @@ impl Scytale {
     pub fn encrypt(&self, s: &str) -> String {
         let text = self.parse_plain_text(s).chars().collect::<Vec<char>>();
 
-        let grid = Vec2::new(self.row_len as usize, text.len() / self.row_len as usize);
+        let x = self.row_len as usize;
+        let y = text.len() / x;
+        let grid = Vec2 { x, y }; 
 
         let mut encrypted = Vec::new();
 
@@ -37,7 +42,9 @@ impl Scytale {
     pub fn decrypt(&self, text: &str) -> String {
         let text = text.chars().collect::<Vec<char>>();
 
-        let grid = Vec2::new(self.row_len as usize, text.len() / self.row_len as usize);
+        let x = self.row_len as usize;
+        let y = text.len() / x;
+        let grid = Vec2 { x, y }; 
 
         let mut decrypted = Vec::new();
 
