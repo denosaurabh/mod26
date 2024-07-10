@@ -18,10 +18,10 @@
 
 Library of over 25+ cryptography algorithms ranging from classical to modern. 
 
-Helpful for students & beginners who want to refer a minimal headstart-
+Helpful for students & beginners who want to a minimal headstart-
 implementation of different ciphers & encryptions.
 
-This project was coded alongside while I was reading the book -
+This project was coded while I was reading the book -
 <a href="https://amzn.in/d/0dkXNyTh">The Mathematics of Secrets</a>
 
 </pre>
@@ -66,7 +66,7 @@ This project was coded alongside while I was reading the book -
 
 ---- Transposition
 
-- <a href="/src/transposition/syctale.rs">syctale</a>
+- <a href="/src/transposition/scytale.rs">syctale</a>
 - <a href="/src/transposition/rail_fence.rs">rail_fence</a>
 - <a href="/src/transposition/geometric.rs">geometric</a>
 - <a href="/src/transposition/columnar.rs">columnar</a>
@@ -88,7 +88,7 @@ This project was coded alongside while I was reading the book -
 ---- Public Key Cipher
 
 - <a href="/src/public_key/pohlig_hellman.rs">pohlig_hellman</a>
-- <a href="/src/public_key/diffie_hellman.rs">diffie_hellman</a>
+- <a href="/src/public_key/deffie_hellman_key_exchange.rs">diffie_hellman</a>
 - <a href="/src/public_key/rsa.rs">rsa</a>
 
 
