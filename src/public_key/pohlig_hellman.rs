@@ -5,7 +5,7 @@
 
 
 use primes::{PrimeSet, Sieve};
-use crate::utils::{char_set::CharSet, mod_arithmetic::ModArithmetic};
+use crate::utils::{char_set::{CharSet, Converter}, mod_arithmetic::ModArithmetic};
 
 pub struct PohligHellman {
     char_set: CharSet,
@@ -24,87 +24,42 @@ impl PohligHellman {
         Ok(Self::next_prime(n))
     }
 
-    /// Calculate the modular multiplicative inverse of e modulo n.
-    fn exponent_inverse(e: u64, n: u64) -> Result<u64, String> {
-        let mut t = 0i128;
-        let mut newt = 1i128;
-        let mut r = n as i128;
-        let mut newr = e as i128;
-
-        while newr != 0 {
-            let quotient = r / newr;
-            (t, newt) = (newt, t - quotient * newt);
-            (r, newr) = (newr, r - quotient * newr);
-        }
-
-        if r > 1 {
-            return Err("e is not invertible".to_string());
-        }
-        
-        Ok(if t < 0 { t + n as i128 } else { t } as u64)
-    }
-
     fn next_prime(n: u64) -> u64 {
         Sieve::new().find(n).1
     }
 
     /// Encrypt the given text using the provided key.
     pub fn encrypt(&self, text: &str, key: u64) -> Result<String, String> {
-        let charset_len = self.char_set.len();
-        let pad_length = charset_len.to_string().len();
-
         let mut encrypted = String::new();
 
-        for chunk in text.chars().collect::<Vec<char>>().chunks(2) {
-            let p = if chunk.len() == 2 {
-                let a = self.char_set.index_of(chunk[0]);
-                let b = self.char_set.index_of(chunk[1]);
+        let convertor = Converter::new(self.char_set.clone());
+        let num_vec = convertor.convert_to_numvec(text)?;
 
-                format!("{:0width$}{:0width$}", a, b, width = pad_length).parse::<u64>()
-                    .map_err(|e| format!("Failed to parse p: {}", e))?
-            } else {
-                let a = self.char_set.index_of(chunk[0]);
-
-                format!("{:0width$}", a, width = pad_length * 2).parse::<u64>()
-                    .map_err(|e| format!("Failed to parse p: {}", e))?
-            };
-
-            let c = ModArithmetic::pow(p, key, self.n);
-
-            encrypted.push_str(&format!("{:0width$}", c, width = pad_length * 2));
+        for p in num_vec.iter() {
+            let c = ModArithmetic::pow(*p as u64, key, self.n);
+            encrypted.push_str(&format!("{:0width$}", c, width = convertor.pad_length * 2));
         }
 
         Ok(encrypted)
     }
 
-    /// Decrypts the given text using the provided key.
+    // Decrypts the given text using the provided key.
     pub fn decrypt(&self, text: &str, key: u64) -> Result<String, String> {
         let charset_len = self.char_set.len();
         let pad_length = charset_len.to_string().len();
 
-        let d = Self::exponent_inverse(key, self.n - 1)?;
+        let d = ModArithmetic::pow_inverse(key as u128, (self.n - 1) as u128)? as u64;
 
-        let mut decrypted = String::new();
+        let num_vec = text.chars()
+            .collect::<Vec<char>>()
+            .chunks(pad_length * 2)
+            .map(|chunk| {
+               let c = chunk.iter().collect::<String>().parse::<u64>().unwrap();
+               ModArithmetic::pow(c, d, self.n) as u32
+            })
+            .collect::<Vec<u32>>();
 
-        for chunk in text.chars().collect::<Vec<char>>().chunks(pad_length * 2) {
-            let c = chunk.iter().collect::<String>().parse::<u64>()
-                .map_err(|e| format!("Failed to parse c: {}", e))?;
-
-            let p = ModArithmetic::pow(c, d, self.n);
-            let p_str = format!("{:0width$}", p, width = pad_length * 2);
-
-            let a = p_str[..pad_length].parse::<usize>()
-                .map_err(|e| format!("Failed to parse a: {}", e))?;
-
-            let b = p_str[pad_length..].parse::<usize>()
-                .map_err(|e| format!("Failed to parse b: {}", e))?;
-
-            decrypted.push(self.char_set.char_at(a));
-
-            if b != 0 {
-                decrypted.push(self.char_set.char_at(b));
-            }
-        }
+        let decrypted = Converter::new(self.char_set.clone()).numvec_to_string(num_vec);
 
         Ok(decrypted)
     }
@@ -126,11 +81,13 @@ mod tests {
         let encrypted = pohlig_hellman.encrypt(text, key)?;
         println!("Encrypted: {}", encrypted);
 
+        assert_eq!(encrypted, "10872142021919680818197307942378");
+
         // Decrypt
         let decrypted = pohlig_hellman.decrypt(&encrypted, key)?;
         println!("Decrypted: {}", decrypted);
 
-        assert_eq!(decrypted, text);
+        assert_eq!(decrypted, "powertothepeople");
 
         Ok(())
     }

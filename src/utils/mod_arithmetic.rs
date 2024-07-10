@@ -55,6 +55,28 @@ impl ModArithmetic {
         result
     }
 
+    /// CURRENTLY BROKEN!!
+    pub fn pow_inverse(e: u128, n: u128) -> Result<u128, String> {
+        let mut t = 0i128;
+        let mut newt = 1i128;
+        let mut r = n as i128;
+        let mut newr = e as i128;
+
+        while newr != 0 {
+            let quotient = r / newr;
+            (t, newt) = (newt, t - quotient * newt);
+            (r, newr) = (newr, r - quotient * newr);
+        }
+
+        if r > 1 {
+            return Err("e is not invertible".to_string());
+        }
+        
+        Ok(if t < 0 { t + n as i128 } else { t } as u128)
+    }
+
+
+
     // Extended Euclidean Algorithm
     pub fn mod_inverse_i128(k: i128, m: i128) -> Result<i128, &'static str> {
         let mut t = 0;

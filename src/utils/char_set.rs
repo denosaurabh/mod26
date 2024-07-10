@@ -8,6 +8,7 @@
 
 use std::collections::HashSet;
 
+#[derive(Clone)]
 pub struct CharSet {
     pub chars: Vec<char>,
 }
@@ -109,6 +110,64 @@ impl CharSet {
     }
 }
 
+
+// Converter
+pub struct Converter {
+    char_set: CharSet,
+    pub pad_length: usize,
+}
+
+impl Converter {
+    pub fn new(char_set: CharSet) -> Self {
+        let pad_length = char_set.len().to_string().len();
+
+        Self { char_set, pad_length }
+    }
+
+    pub fn convert_to_numvec(&self, text: &str) -> Result<Vec<u32>, String> {
+        let mut numstr = Vec::with_capacity(text.len() / 2 + 1);
+
+        for chunk in text.chars().collect::<Vec<char>>().chunks(2) {
+            let p = if chunk.len() == 2 {
+                let a = self.char_set.index_of(chunk[0]);
+                let b = self.char_set.index_of(chunk[1]);
+
+                format!("{:0width$}{:0width$}", a, b, width = self.pad_length).parse::<u32>()
+                    .map_err(|e| format!("Failed to parse p: {}", e))?
+            } else {
+                let a = self.char_set.index_of(chunk[0]);
+
+                format!("{:0width$}", a, width = self.pad_length * 2).parse::<u32>()
+                    .map_err(|e| format!("Failed to parse p: {}", e))?
+            };
+
+            numstr.push(p);
+        }
+
+        Ok(numstr)
+    }
+
+    pub fn numvec_to_string(&self, numvec: Vec<u32>) -> String {
+        let mut text = String::new();
+
+        for p in numvec.iter() {
+            let p_str = format!("{:0width$}", p, width = self.pad_length * 2);
+
+            let a = p_str[..self.pad_length].parse::<usize>().unwrap();
+
+            if a != 0 {
+                text.push(self.char_set.char_at(a));
+            }
+
+            if self.pad_length * 2 == p_str.len() {
+                let b = p_str[self.pad_length..].parse::<usize>().unwrap();
+                text.push(self.char_set.char_at(b));
+            }
+        }
+
+        text
+    }
+}
 
 
 
@@ -238,5 +297,46 @@ mod tests {
         charset.index_of('z');
     }
 
-    
+
+    // Converter tests
+    #[test]
+    fn test_convert_to_numstr() {
+        let char_set = CharSet::from_alphabet_lowercase();
+        let converter = Converter::new(char_set);
+        
+        let result = converter.convert_to_numvec("tellmethreetimes").unwrap();
+        assert_eq!(result, vec![1904, 1111, 1204, 1907, 1704, 0419, 0812, 0418]);
+
+        let result = converter.convert_to_numvec("hello").unwrap();
+        assert_eq!(result, vec![0704, 1111, 14]);
+
+        let result = converter.convert_to_numvec("z").unwrap();
+        assert_eq!(result, vec![25]);
+    }
+
+    #[test]
+    fn test_convert_numvec_to_str() {
+        let char_set = CharSet::from_alphabet_lowercase();
+        let converter = Converter::new(char_set);
+        
+        let result = converter.numvec_to_string(vec![1904, 1111, 1204, 1907, 1704, 0419, 0812, 0418]);
+        assert_eq!(result, "tellmethreetimes");
+
+        let result = converter.numvec_to_string(vec![0704, 1111, 14]);
+        assert_eq!(result, "hello");
+
+        let result = converter.numvec_to_string(vec![25]);
+        assert_eq!(result, "z");
+    }
+
+    #[test]
+    fn test_convert_to_numstr_with_custom_charset() {
+        let char_set = CharSet::from_string("0123456789abcdefghijklmnopqrstuvwxyz");
+        let converter = Converter::new(char_set);
+        
+        let result = converter.convert_to_numvec("a1b2c3").unwrap();
+        assert_eq!(result, vec![1001, 1102, 1203]);
+    }
+
 }
+
