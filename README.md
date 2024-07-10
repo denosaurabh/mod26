@@ -18,7 +18,7 @@
 
 Library of over 25+ cryptography algorithms ranging from classical to modern. 
 
-Helpful for students & beginners who want to a minimal headstart-
+Helpful for students & beginners who want a minimal headstart-
 implementation of different ciphers & encryptions.
 
 This project was coded while I was reading the book -
@@ -136,4 +136,11 @@ let decrypted = vigenere.decrypt("ovnlqbpvthznzouz", key); // -> attackingtonigh
 - https://amzn.in/d/09v3PAqD
 - https://www.dcode.fr/en
 - https://www.schneier.com/crypto-gram/archives/1999/1015.html
+```
+
+
+```
+# License
+
+MIT License 
 ```
